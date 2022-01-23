@@ -1,3 +1,5 @@
+// TODO: 김성모 짤 생성기 https://sungmo.jjong.co.kr/api/download?first=%EA%B9%80%EC%B0%AC%EC%9B%85%EC%9D%B4&second=%ED%95%98%ED%83%9C%EC%9B%85%EC%9D%84%20%EC%A3%BD%EC%97%AC?
+
 package main
 
 import (
@@ -66,9 +68,12 @@ func main() {
 	}
 
 	for _, v := range commands {
-		_, err := discord.ApplicationCommandCreate(discord.State.User.ID, os.Getenv("GUILD_ID"), v)
-		if err != nil {
-			log.Panicf("Cannot create '%v' command: %v", v.Name, err)
+		for _, guild := range discord.State.Guilds {
+			fmt.Printf("this is guild id : %s\n", guild.ID)
+			_, err := discord.ApplicationCommandCreate(discord.State.User.ID, guild.ID, v)
+			if err != nil {
+				log.Panicf("Cannot create '%v' command: %v", v.Name, err)
+			}
 		}
 	}
 

@@ -10,12 +10,15 @@ import (
 )
 
 func GoogleImageController(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+	err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: "잠시만 기다려",
 		},
 	})
+	if err != nil {
+		return
+	}
 
 	keyword := i.ApplicationCommandData().Options[0].StringValue()
 	limit := i.ApplicationCommandData().Options[1].IntValue()
@@ -28,7 +31,10 @@ func GoogleImageController(s *discordgo.Session, i *discordgo.InteractionCreate)
 
 	arr := strings.Split(string(googleSearchOutput), "\n")
 
-	s.ChannelMessageSend(i.ChannelID, fmt.Sprintf("%s를 검색한 결과 줌 %d를 가져뫘다.", keyword, limit))
+	_, err = s.ChannelMessageSend(i.ChannelID, fmt.Sprintf("%s를 검색한 결과 줌 %d를 가져뫘다.", keyword, limit))
+	if err != nil {
+		return
+	}
 
 	for _, result := range arr {
 		_, err := s.ChannelMessageSend(i.ChannelID, result)
