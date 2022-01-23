@@ -1,4 +1,4 @@
-// TODO: 김성모 짤 생성기 https://sungmo.jjong.co.kr/api/download?first=%EA%B9%80%EC%B0%AC%EC%9B%85%EC%9D%B4&second=%ED%95%98%ED%83%9C%EC%9B%85%EC%9D%84%20%EC%A3%BD%EC%97%AC?
+// TODO: 김성모 짤 생성기
 
 package main
 
@@ -33,10 +33,31 @@ var (
 				},
 			},
 		},
+		{
+			Name:        "김성모짤생성",
+			Description: "김성모의 말대꾸 짤을 생성합니다.",
+			Options: []*discordgo.ApplicationCommandOption{
+				{
+					Type:        discordgo.ApplicationCommandOptionString,
+					Name:        "위",
+					Description: "위에 있는 말풍선에 들어갈 말입니다.",
+					Required:    true,
+				},
+				{
+					Type:        discordgo.ApplicationCommandOptionString,
+					Name:        "아래",
+					Description: "아래에 있는 말풍선에 들어갈 말입니다.",
+					Required:    true,
+				},
+			},
+		},
 	}
 	commandHandlers = map[string]func(s *discordgo.Session, i *discordgo.InteractionCreate){
 		"검색": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
 			cmd.GoogleImageController(s, i)
+		},
+		"김성모짤생성": func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+			cmd.KimSeongMoMemeController(s, i)
 		},
 	}
 )
@@ -69,7 +90,6 @@ func main() {
 
 	for _, v := range commands {
 		for _, guild := range discord.State.Guilds {
-			fmt.Printf("this is guild id : %s\n", guild.ID)
 			_, err := discord.ApplicationCommandCreate(discord.State.User.ID, guild.ID, v)
 			if err != nil {
 				log.Panicf("Cannot create '%v' command: %v", v.Name, err)
