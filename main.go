@@ -1,5 +1,3 @@
-// TODO: 김성모 짤 생성기
-
 package main
 
 import (
