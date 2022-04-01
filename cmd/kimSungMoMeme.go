@@ -9,7 +9,8 @@ import (
 	"os"
 )
 
-func KimSeongMoMemeController(s *discordgo.Session, i *discordgo.InteractionCreate) {
+func KimSungMoMemeController(s *discordgo.Session, i *discordgo.InteractionCreate) {
+
 	err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
@@ -24,13 +25,13 @@ func KimSeongMoMemeController(s *discordgo.Session, i *discordgo.InteractionCrea
 	second := i.ApplicationCommandData().Options[1].StringValue()
 
 	fileUrl := fmt.Sprintf("https://sungmo.jjong.co.kr/api/download?first=%s&second=%s", first, second)
-	err = DownloadFile("download.jpeg", fileUrl)
+	err = DownloadFile("download.jpg", fileUrl)
 	if err != nil {
 		fmt.Printf("file download err : %v", err)
 		return
 	}
 
-	file, err := os.Open("download.jpeg")
+	file, err := os.Open("download.jpg")
 
 	if err != nil {
 		fmt.Println(err)
@@ -41,8 +42,8 @@ func KimSeongMoMemeController(s *discordgo.Session, i *discordgo.InteractionCrea
 
 	s.ChannelMessageSendComplex(i.ChannelID, &discordgo.MessageSend{Files: []*discordgo.File{
 		{
-			ContentType: "image/jpeg",
-			Name:        "download.jpeg",
+			ContentType: "image/jpg",
+			Name:        "download.jpg",
 			Reader:      bufio.NewReader(file),
 		},
 	}})
